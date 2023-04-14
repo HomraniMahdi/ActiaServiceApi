@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+  grafana:
+    image: grafana/grafana:8.0.6
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.outlook.com:587
+      - GF_SMTP_USER=mahdi.homrani@outlook.com
+      - GF_SMTP_PASSWORD=M20562219
+      - GF_SMTP_FROM_ADDRESS=mahdi.homrani@outlook.com
+      - GF_SMTP_FROM_NAME=Grafana
+      - GF_SMTP_SKIP_VERIFY=true # On
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=esprit
+    volumes:
+      - ./grafana:/var/lib/grafana

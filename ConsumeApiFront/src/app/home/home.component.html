@@ -1,0 +1,44 @@
+<html>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+   <!--Animate.css-->
+   <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      />
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+   <link rel="stylesheet" type="text/css" href="home.component.css">
+</head>
+<body>
+   <header class='z-10 bg-gray-900 pb-4 text-white lg:p-4' >
+      <nav class='max-w-screen-xl m-auto flex items-center justify-between pt-8  pl-6 pr-6 lg:pt-6 lg:pb-6 lg:pl-12 lg:pr-12 text-3xl'>
+         <div class="animate__animated animate__bounceInRight animate__slow font-bold  tracking-widest">
+            ACTIA <span class='text-green-500'>ES</span>
+         </div>
+         <div  id='buttonForMenu' class='border-2 p-2 text-2xl rounded-sm lg:hidden '>
+            <i class="fas fa-bars"></i>
+         </div>
+         <!---->
+         <div class='hidden lg:block '>
+            <ul class='flex items-center justify-around font-semibold text-lg'>
+               <li class='mr-8 cursor-pointer text-green-500 '><a href="/home"></a>Home</li>
+               <li class='mr-8 cursor-pointer'><a href="/grafana">Metric Visualisation</a> </li>
+               <li class='mr-8 cursor-pointer'><a href="/swagger">Api Documentation</a></li>
+            </ul>
+         </div>
+      </nav>
+   </header>
+   <div class="flex items-center h-screen pr-6 pl-6 pt-8  text-white text-center" id='heroImage'>
+      <div class='m-auto' >
+         <div class='animate__animated animate__fadeInDown  pb-8 font-light uppercase text-green-500 tracking-widest md:text-lg '>Web Cloud</div>
+         <div >
+            <h1 class='animate__animated  animate__fadeInLeft max-w-screen-sm m-auto pb-6 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl'>Monitoring Application</h1>
+            <p class='animate__animated  animate__fadeInRight  pb-6 font-semibold md:text-lg'>
+               Actia Engineering Service
+            </p>
+            <a href="/grafana"><button class='animate__animated animate__fadeIn  p-4 pr-8 pl-8 rounded-md font-semibold bg-green-600 uppercase '>Show Statistics</button></a>
+         </div>
+      </div>
+   

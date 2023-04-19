@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pfe-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pfe-back
+  template:
+    metadata:
+      labels:
+        app: pfe-back
+    spec:
+      containers:
+        - name: pfe-back
+          image: homranimahdi/pfe-back
+          ports:
+            - containerPort: 8080

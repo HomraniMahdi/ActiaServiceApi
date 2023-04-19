@@ -29,7 +29,7 @@ services:
     ports:
       - "9090:9090"
   app:
-    build: .
+    build: ..
     image: pfe-back:latest
     container_name: pfe-back
     restart: "no"

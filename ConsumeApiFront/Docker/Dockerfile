@@ -2,7 +2,7 @@
 
 FROM node:18.14.0 AS build
 WORKDIR /app
-COPY . .
+COPY .. .
 
 RUN npm install @angular/cli@latest -g
 

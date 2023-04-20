@@ -14,10 +14,10 @@ import java.io.IOException;
 @Service
 public class KafkaConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(Producer.class);
+    @KafkaListener(topics="my_topic", groupId="my_group_id")
+    public void getMessage(String message){
 
-    @KafkaListener(topics = "users", groupId = "group_id")
-    public void consume(String message) throws IOException {
-        logger.info(String.format("#### -> Consumed message -> %s", message));
+        System.out.println(message);
+
     }
 }

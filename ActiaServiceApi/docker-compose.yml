@@ -2,22 +2,20 @@ version: '3'
 
 services:
   zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
-    restart: always
-
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    restart: always
-    depends_on:
-      - zookeeper
+    image: 'bitnami/zookeeper:latest'
     ports:
-      - "9092:9092"
+      - '2181:2181'
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
   prometheus:
     image: prom/prometheus:latest
@@ -42,8 +40,7 @@ services:
       SPRING_KAFKA_BOOTSTRAPSERVERS: kafka:9092
       SPRING_PROFILES_ACTIVE: prod
       SPRING_PROFILES_DEFAULT: prod
-      #SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
-      #SPRING_DATASOURCE_USERNAME: postgres
-      #SPRING_DATASOURCE_PASSWORD: mysecretpassword
+      SPRING_KAFKA_CONSUMER_GROUP_ID: my-group
+      SPRING_KAFKA_TEMPLATE_DEFAULT_TOPIC: my-topic
     command:
       - "--spring.profiles.active=dev"

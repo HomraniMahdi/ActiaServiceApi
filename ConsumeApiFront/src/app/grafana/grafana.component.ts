@@ -1,15 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-grafana',
-  template: '<iframe src="http://localhost:3000/d/your-dashboard-id/your-dashboard-name"></iframe>',
+  templateUrl: './grafana.component.html',
   styleUrls: ['./grafana.component.css']
 })
-export class GrafanaComponent implements OnInit {
+export class GrafanaComponent{
+  headerStyle = {};
+  showNavBar = false;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  @HostListener('document:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (event.clientY < 50) {
+      this.headerStyle = {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        zIndex: '1'
+      };
+      this.showNavBar = true;
+    } else {
+      this.headerStyle = {};
+      this.showNavBar = false;
+    }
   }
-
 }

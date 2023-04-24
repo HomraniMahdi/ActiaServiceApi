@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'swagger', component: SwaggerUiComponent },
   { path: 'grafana', component: GrafanaComponent },
   { path: '', component: HomeComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
 
 @NgModule({

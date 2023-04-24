@@ -1,8 +1,8 @@
 version: '3.9'
 services:
-  web:
+  angular:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     ports:
       - "4200:4200"
@@ -24,4 +24,6 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=esprit
     volumes:
-      - ./grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
+volumes:
+  grafana_data:

@@ -1,6 +1,8 @@
 version: '3.9'
 services:
   angular:
+    image: pfe-front
+    container_name: pfe-front
     build:
       context: .
       dockerfile: Dockerfile

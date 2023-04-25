@@ -27,8 +27,10 @@ services:
     ports:
       - "9090:9090"
   app:
-    build: ..
-    image: pfe-back:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pfe-back
     container_name: pfe-back
     restart: "no"
     ports:

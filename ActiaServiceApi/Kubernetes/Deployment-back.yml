@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pfe-back
+  labels:
+    app: pfe-back
 spec:
   replicas: 1
   selector:
@@ -14,6 +16,8 @@ spec:
     spec:
       containers:
         - name: pfe-back
-          image: homranimahdi/pfe-back
+          image: homranimahdi/pfe-back:lastest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
+---

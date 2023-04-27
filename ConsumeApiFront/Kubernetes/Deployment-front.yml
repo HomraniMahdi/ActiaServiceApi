@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pfe-front
+  labels:
+    app: pfe-front
 spec:
   replicas: 1
   selector:
@@ -14,6 +16,8 @@ spec:
     spec:
       containers:
         - name: pfe-front
-          image: homranimahdi/pfe-front
+          image: homranimahdi/pfe-front:lastest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 3000
+---

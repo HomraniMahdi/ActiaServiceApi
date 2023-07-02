@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-dashboard
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: monitoring-dashboard
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: monitoring-dashboard
+    spec:
+      containers:
+        - name: monitoring-dashboard
+          image: monitoring-dashboard
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4201

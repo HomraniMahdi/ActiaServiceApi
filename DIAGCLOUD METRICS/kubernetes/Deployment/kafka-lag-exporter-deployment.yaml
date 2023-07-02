@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-lag-exporter
+  namespace: monitoring
+  labels:
+    app: kafka-lag-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka-lag-exporter
+  template:
+    metadata:
+      labels:
+        app: kafka-lag-exporter
+    spec:
+      containers:
+        - name: kafka-lag-exporter
+          image: lightbend/kafka-lag-exporter:0.5.5
+          volumeMounts:
+            - name: config-volume
+              mountPath: /opt/docker/conf/
+          ports:
+            - containerPort: 9999
+      volumes:
+        - name: config-volume
+          configMap:
+            name: kafka-lag-exporter-config

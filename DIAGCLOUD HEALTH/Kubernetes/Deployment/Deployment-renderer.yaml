@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  name: grafana-image-renderer-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-image-renderer
+  template:
+    metadata:
+      labels:
+        app: grafana-image-renderer
+    spec:
+      containers:
+        - name: grafana-image-renderer
+          image: bitnami/grafana-image-renderer
+          ports:
+            - containerPort: 28080

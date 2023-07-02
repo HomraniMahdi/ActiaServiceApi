@@ -1,0 +1,80 @@
+
+
+#heroImage {
+    background:url('../../assets/Background.jpg');
+    background-size: cover;
+    height:100vh;
+  }
+
+  header {
+    position: fixed;
+    width:100%;
+  }
+  header ul li {
+    transition: 0.3s;
+  }
+  header ul li:hover{
+    color: #10B981;
+  }
+
+  .invisibleMenu {
+    background: #111827;
+    color:white;
+    height:0px;
+    overflow:hidden;
+    transition:  height .8s;
+  }
+
+  .visibleMenu {
+    background: #111827;
+    color:white;
+    height:200px;
+    transition: height.8s;
+    /*Come back tomorrow and see why this worked*/
+    overflow: hidden;
+
+  }
+
+  #serviceCard{
+    border:1px solid black;
+    transition: transform .2s; /* Animation */
+    margin-right:1rem;
+  }
+
+  #serviceCard,h3,button {
+    transition: 0.3s;
+
+  }
+
+  #serviceCard:hover{
+    background-color: #101721;
+    border:1px solid  #10B981;
+    transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+
+  }
+  #serviceCard:hover h3{
+    color:#10B981
+
+  }
+  #serviceCard:hover button{
+    color:white;
+  }
+
+  #whyChoose {
+    background:black;
+    background-size: cover;
+    height:auto
+  }
+
+  #projectList img{
+    height:390px;
+    width:100%;
+  }
+
+  footer{
+    background: #141E30;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #243B55, #111827);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #243B55, #111827); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  }
+

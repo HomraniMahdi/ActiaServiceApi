@@ -1,0 +1,301 @@
+version: '3'
+
+services:
+
+  ####################  Keycloak ###############################
+
+  keycloak:
+    image: jboss/keycloak:11.0.2
+    container_name: keycloak-Monitoring
+    hostname: keycloak-Monitoring
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=postgres
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+      - KEYCLOAK_IMPORT=/tmp/realm-monitoring.json
+    volumes:
+      - ./Infrastructure/keycloak/realm-monitoring.json:/tmp/realm-monitoring.json
+    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    depends_on:
+      - postgres
+    networks:
+      - monitor-net
+  ####################  Postgres ###############################
+
+  postgres:
+    image: postgres:13.0-alpine
+    container_name: postgres-Monitoring
+    hostname: postgres-Monitoring
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./Infrastructure/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - monitor-net
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    restart: always
+    ports:
+      - "81:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - monitor-net
+
+  ####################  Zookeeper  ###############################
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    hostname: zookeeper
+    container_name: Zookeeper-Monitoring
+    restart: always
+    ports:
+      - "2181:2181"
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+      ####################  Kafka  #####################################
+
+  kafka:
+    image: wurstmeister/kafka
+    hostname: kafka
+    container_name: Kafka-Monitoring
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_CREATE_TOPICS: "monitoring-topics"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      JMX_PORT: 9999
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+    ####################  Prometheus  ###############################
+
+  prometheus:
+    image: prom/prometheus:latest
+    hostname: prometheus
+    container_name: Prometheus-Monitoring
+    restart: unless-stopped
+    links:
+      - cadvisor:cadvisor
+    depends_on:
+      - cadvisor
+      - kafka
+    volumes:
+      - './Infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro'
+      - './Infrastructure/prometheus/alert.rules:/etc/prometheus/alert.rules'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+    ####################  SpringBoot Application  ###############################
+
+  monitoring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: diagcloud-metriques
+    hostname: DiagCloud-Metriques
+    container_name: DiagCloud-Metriques
+    restart: 'no'
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+      - prometheus
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: group-Monitor
+      SPRING_KAFKA_TEMPLATE_DEFAULT_TOPIC: "monitoring-topics"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/keycloak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      NODE_EXPORTER_PORT: 9100
+    command: ["/bin/sh", "-c", "node_exporter --web.listen-address=:9100 --collector.textfile.directory=/prometheus"]
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+    ####################  Kafka Lag Exporter  ###############################
+
+  kafka-lag-exporter:
+    image: lightbend/kafka-lag-exporter:0.5.5
+    hostname: kafka-lag-exporter
+    container_name: kafka-lag-exporter-Monitoring
+    restart: always
+    ports:
+      - 9999:9999
+    volumes:
+      - ./Infrastructure/kafka-lag-exporter/:/opt/docker/conf/
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+    ####################  Alert Manager  ###############################
+
+  alertmanager:
+    image: prom/alertmanager
+    hostname: alert-manager
+    container_name: alert-manager-Monitoring
+    restart: unless-stopped
+    volumes:
+      - alertManager:/alertManager
+      - ./Infrastructure/alertManager/:/etc/alertmanager/
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - 9093:9093
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+  ####################  Node Exporter  ###############################
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter-Monitoring
+    hostname: node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    restart: always
+    ports:
+      - "9100:9100"
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  ####################  Kafka Exporter  ###############################
+
+  kafka-exporter:
+    image: bitnami/kafka-exporter
+    container_name: kafka-exporter-Monitoring
+    hostname: kafka-exporter
+    restart: always
+    ports:
+      - "9308:9308"
+    environment:
+      LOG_LEVEL: 'INFO'
+      KAFKA_SERVERS: kafka:9092
+      KAFKA_EXPORTER_KAFKA_VERSION: "3.4.0"
+    depends_on:
+      - kafka
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  ####################  Kafka Ui  ###############################
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafka-ui
+    hostname: kafka-ui
+    restart: "no"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - zookeeper
+      - kafka
+    environment:
+      KAFKA_BROKERCONNECT: "PLAINTEXT://kafka:9092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+  ####################  Container Advisor  ###############################
+  cadvisor:
+    image: google/cadvisor
+    container_name: cadvisor-monitoring
+    hostname: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+
+      ####################  Jmx Prometheus Exporter ###############################
+  jmx-exporter:
+    image: sscaling/jmx-prometheus-exporter
+    container_name: jmx-prometheus-exporter
+    hostname: jmx-prometheus-exporter
+    ports:
+      - "5556:5556"
+    networks:
+      - monitor-net
+
+      ####################  Blackbox Exporter ###############################
+
+  blackbox_exporter:
+    container_name: blackbox_exporter-monitoring
+    hostname: blackbox_exporter
+    image: prom/blackbox-exporter:v0.10.0
+    ports:
+      - 9115:9115
+    volumes:
+      - ./Infrastructure/blackbox-exporter/:/etc/blackbox-exporter/
+    command:
+      - '--config.file=/etc/blackbox-exporter/config.yml'
+    restart: always
+    networks:
+      - monitor-net
+
+
+networks:
+  monitor-net:
+    driver: bridge
+
+volumes:
+  prometheus_data: {}
+  postgres:
+  alertManager:

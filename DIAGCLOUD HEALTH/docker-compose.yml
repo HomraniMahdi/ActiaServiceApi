@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+
+  #################### Angular App ###############################
+
+  angular:
+    image: diagcloud-health
+    container_name: DiagCloud-Health
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4201:4201"
+    labels:
+      org.label-schema.group: "monitoring"
+    networks:
+      - monitor-net
+
+  #################### Grafana Dashboard ###############################
+
+  grafana:
+    image: grafana/grafana:8.0.6
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - 'grafana_data:/var/lib/grafana'
+      - './Infrastructure/grafana/provisioning/:/etc/grafana/provisioning/'
+    env_file:
+      - ./Infrastructure/grafana/config.monitoring
+    labels:
+      org.label-schema.group: "monitoring"
+    networks:
+      - monitor-net
+
+  #################### Grafana Image Renderer ###############################
+
+  grafana_image_renderer:
+    image: docker.io/bitnami/grafana-image-renderer:3
+    container_name: grafana-image-renderer
+    restart: unless-stopped
+    ports:
+      - "28081:28081"
+    labels:
+      org.label-schema.group: "monitoring"
+    networks:
+      - monitor-net
+
+networks:
+  monitor-net:
+    driver: bridge
+
+volumes:
+  grafana_data: {}

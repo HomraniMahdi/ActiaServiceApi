@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alert-manager
+  namespace: monitoring
+  labels:
+    app: alert-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alert-manager
+  template:
+    metadata:
+      labels:
+        app: alert-manager
+    spec:
+      containers:
+        - name: alert-manager
+          image: prom/alertmanager
+          ports:
+            - containerPort: 9093
+      volumes:
+        - name: config-volume
+          configMap:
+            name: alertmanager-config

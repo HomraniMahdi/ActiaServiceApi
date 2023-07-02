@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: monitoring
+  labels:
+    io.soda.service: zookeeper
+    app: soda-zookeeper
+  name: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.soda.service: zookeeper
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.soda.service: zookeeper
+        app: soda-zookeeper
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - soda-zookeeper
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - image: wurstmeister/zookeeper
+          name: zookeeper
+          ports:
+            - containerPort: 2181
+          resources: {}
+      restartPolicy: Always

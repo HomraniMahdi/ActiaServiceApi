@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: jboss/keycloak:11.0.2
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KEYCLOAK_USER
+              value: admin
+            - name: KEYCLOAK_PASSWORD
+              value: admin
+            - name: DB_VENDOR
+              value: postgres
+            - name: DB_ADDR
+              value: postgres
+            - name: DB_DATABASE
+              value: keycloak
+            - name: DB_USER
+              value: keycloak
+            - name: DB_PASSWORD
+              value: keycloak
+            - name: KEYCLOAK_IMPORT
+              value: keycloak-config
+          volumeMounts:
+            - name: keycloak-data
+              mountPath: /opt/jboss/keycloak/standalone/data
+            - name: postgres-config
+              mountPath: /docker-entrypoint-init.d
+            - name: keycloak-config
+              mountPath: /tmp/realm-monitoring.json
+      volumes:
+        - name: keycloak-data
+          emptyDir: {}
+        - name: postgres-config
+          configMap:
+            name: postgres-config
+        - name: keycloak-config
+          configMap:
+            name: keycloak-config
+      terminationGracePeriodSeconds: 10

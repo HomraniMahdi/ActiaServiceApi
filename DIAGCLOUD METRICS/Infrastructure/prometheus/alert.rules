@@ -9,7 +9,7 @@ groups:
         annotations:
           summary: "Monitor service non-operational"
           description: "Service {{ $labels.instance }} is down."
-#############################################################################################################
+
   - name: monitoring_down
     rules:
       - alert: job_down
@@ -20,26 +20,27 @@ groups:
         annotations:
           summary: "Job is down"
           description: "The `monitoring` job is down on instance {{ $labels.instance }}."
-#############################################################################################################
+
+
   - name: http_response_time
     rules:
       - alert: http_response_time
-        expr: max(http_server_requests_seconds_sum{application="Monitoring-App", instance="monitoring-app:8081", status=~"2..|4..|5..", uri!~"/actuator/prometheus"}) by (method, endpoint) > 5
-        for: 1s
+        expr: max(http_server_requests_seconds_sum{application="Monitoring-App", instance="monitoring-app:8081", status=~"2..|4..|5..", uri!~"/actuator/prometheus"}) by (method, endpoint) > 10
+        for: 15s
         labels:
           severity: warning
         annotations:
           summary: "High HTTP response time"
-          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last second.""
+          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last 15 seconds."
       - alert: http_response_time
-        expr: max(http_server_requests_seconds_sum{application="Monitoring-App", instance="monitoring-app:8081", status=~"2..|4..|5..", uri!~"/actuator/prometheus"}) by (method, endpoint)  > 15
-        for: 1s
+        expr: max(http_server_requests_seconds_sum{application="Monitoring-App", instance="monitoring-app:8081", status=~"2..|4..|5..", uri!~"/actuator/prometheus"}) by (method, endpoint)  > 20
+        for: 15s
         labels:
           severity: critical
         annotations:
           summary: "Critical HTTP response time"
-          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last second."
-#############################################################################################################
+          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last 15 seconds."
+
   - name: http_Valid_response_time
     rules:
       - alert: http_Valid_response_time
@@ -49,7 +50,7 @@ groups:
           severity: warning
         annotations:
           summary: "High HTTP response time"
-          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last second.""
+          description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last second."
       - alert: http_Valid_response_time
         expr:  max(http_server_requests_seconds_sum{application="Monitoring-App", instance="monitoring-app:8081",status=~"2..",uri=~"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+"}) by (method, endpoint)> 15
         for: 1s
@@ -58,7 +59,7 @@ groups:
         annotations:
           summary: "Critical HTTP response time"
           description: "The `Monitoring-App` instance {{ $labels.instance }} has an average HTTP response time of {{ humanizeDuration $value }} in the last second."
-#############################################################################################################
+
   - name: http_errors
     rules:
       - alert: http_errors
@@ -77,51 +78,3 @@ groups:
         annotations:
           summary: "Critical HTTP errors"
           description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} critical HTTP errors in the last Second."
-
-#############################################################################################################
-      - alert: high_memory_load
-        expr: (sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) ) / sum(node_memory_MemTotal_bytes) * 100 > 85
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Server memory is almost full"
-          description: "Docker host memory usage is {{ humanize $value}}%. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
-
-      - alert: high_storage_load
-        expr: (node_filesystem_size_bytes{fstype="aufs"} - node_filesystem_free_bytes{fstype="aufs"}) / node_filesystem_size_bytes{fstype="aufs"}  * 100 > 85
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Server storage is almost full"
-          description: "Docker host storage usage is {{ humanize $value}}%. Reported by instance {{ $labels.instance }} of job {{ $labels.job }}."
-
-  - name: containers
-    rules:
-      - alert: jenkins_down
-        expr: absent(container_memory_usage_bytes{name="jenkins"})
-        for: 30s
-        labels:
-          severity: critical
-        annotations:
-          summary: "Jenkins down"
-          description: "Jenkins container is down for more than 30 seconds."
-
-      - alert: jenkins_high_cpu
-        expr: sum(rate(container_cpu_usage_seconds_total{name="jenkins"}[1m])) / count(node_cpu_seconds_total{mode="system"}) * 100 > 10
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Jenkins high CPU usage"
-          description: "Jenkins CPU usage is {{ humanize $value}}%."
-
-      - alert: jenkins_high_memory
-        expr: sum(container_memory_usage_bytes{name="jenkins"}) > 1200000000
-        for: 30s
-        labels:
-          severity: warning
-        annotations:
-          summary: "Jenkins high memory usage"
-          description: "Jenkins memory consumption is at {{ humanize $value}}."

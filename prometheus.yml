@@ -1,0 +1,96 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+
+# alert
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+rule_files:
+  - 'alert.rules'
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - 'prometheus:9090'
+  - job_name: monitoring
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets:
+          - 'monitoring-app:8081'
+        labels:
+          application: monitoring
+
+  - job_name: node-exporter
+    static_configs:
+      - targets:
+          - 'node-exporter:9100'
+  - job_name: kafka-lag-exporter
+    static_configs:
+      - targets:
+          - 'kafka-lag-exporter:9999'
+  - job_name: spring-actuator
+    metrics_path: /actuator/prometheus
+    scheme: http
+    scrape_interval: 60s
+    scrape_timeout: 60s
+    static_configs:
+      - targets:
+          - 'monitoring-app:8081'
+
+  - job_name: kafka-exporter
+    static_configs:
+      - targets:
+          - 'kafka-exporter:9308'
+        labels:
+          middleware_type: kafka
+
+  - job_name: 'jmx-exporter'
+    static_configs:
+      - targets:
+          - jmx-exporter:5556
+
+  - job_name: 'kafka'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['kafka:9292'] # replace with the hostname or IP address of your Kafka Exporter
+        labels:
+          instance: kafka
+    metrics_path: '/metrics'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 'prometheus:9090' # replace with the hostname or IP address of your Prometheus server
+
+  - job_name: 'node'
+    static_configs:
+      - targets:
+          - cadvisor:8080
+          - node-exporter:9100
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  # Look for a HTTP 200 response.
+    static_configs:
+      - targets:
+          - https://pagertree.com
+          - https://www.google.com
+          - https://prometheus.io
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: "blackbox_exporter:9115"  # Blackbox exporter.
+      - target_label: region
+        replacement: "local"

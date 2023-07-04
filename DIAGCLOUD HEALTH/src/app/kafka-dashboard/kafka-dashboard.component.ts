@@ -1,14 +1,12 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 
 @Component({
-  selector: 'app-vci',
-  templateUrl: './vci.component.html',
-  styleUrls: ['./vci.component.css']
+  selector: 'app-kafka-dashboard',
+  templateUrl: './kafka-dashboard.component.html',
+  styleUrls: ['./kafka-dashboard.component.css']
 })
-export class VciComponent implements OnInit {
+export class KafkaDashboardComponent {
 
-  constructor(private http: HttpClient) {}
   headerStyle = {};
   showNavBar = false;
 
@@ -27,9 +25,6 @@ export class VciComponent implements OnInit {
       this.headerStyle = {};
       this.showNavBar = false;
     }
-  }
-  ngOnInit(): void {
-
   }
 
 }

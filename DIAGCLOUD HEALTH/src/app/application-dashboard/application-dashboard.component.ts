@@ -1,14 +1,12 @@
 import {Component, HostListener, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 
 @Component({
-  selector: 'app-vci',
-  templateUrl: './vci.component.html',
-  styleUrls: ['./vci.component.css']
+  selector: 'app-application-dashboard',
+  templateUrl: './application-dashboard.component.html',
+  styleUrls: ['./application-dashboard.component.css']
 })
-export class VciComponent implements OnInit {
+export class ApplicationDashboardComponent {
 
-  constructor(private http: HttpClient) {}
   headerStyle = {};
   showNavBar = false;
 
@@ -28,8 +26,4 @@ export class VciComponent implements OnInit {
       this.showNavBar = false;
     }
   }
-  ngOnInit(): void {
-
-  }
-
 }

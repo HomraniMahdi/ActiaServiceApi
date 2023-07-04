@@ -15,6 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -3682,5 +3683,5 @@
   "timezone": "",
   "title": "Request_statistics",
   "uid": "lKKN-Ir4zZ",
-  "version": 17
+  "version": 1
 }

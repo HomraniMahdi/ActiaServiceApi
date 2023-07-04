@@ -70,11 +70,10 @@ scrape_configs:
       - target_label: __address__
         replacement: 'prometheus:9090' # replace with the hostname or IP address of your Prometheus server
 
-  - job_name: 'node'
+  - job_name: 'cadvisor'
     static_configs:
       - targets:
           - cadvisor:8080
-          - node-exporter:9100
 
   - job_name: 'blackbox'
     metrics_path: /probe

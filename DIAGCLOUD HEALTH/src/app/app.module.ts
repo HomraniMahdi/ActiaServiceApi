@@ -13,6 +13,13 @@ import {SwaggerUiComponent} from "./swagger-ui/swagger-ui.component";
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import {initializer} from "../utils/app-inits";
 import { VciComponent } from './vci/vci.component';
+import { DockerDashboardComponent } from './docker-dashboard/docker-dashboard.component';
+import { HttpDashboardComponent } from './http-dashboard/http-dashboard.component';
+import { ApplicationDashboardComponent } from './application-dashboard/application-dashboard.component';
+import { KafkaDashboardComponent } from './kafka-dashboard/kafka-dashboard.component';
+import { ProductInstanceComponent } from './product-instance/product-instance.component';
+import { SupportSessionComponent } from './support-session/support-session.component';
+import { DepConfigComponent } from './dep-config/dep-config.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +29,14 @@ import { VciComponent } from './vci/vci.component';
     SwaggerUiComponent,
     HomeComponent,
     NavBarComponent,
-    VciComponent
+    VciComponent,
+    DockerDashboardComponent,
+    HttpDashboardComponent,
+    ApplicationDashboardComponent,
+    KafkaDashboardComponent,
+    ProductInstanceComponent,
+    SupportSessionComponent,
+    DepConfigComponent
   ],
   imports: [
     BrowserModule,

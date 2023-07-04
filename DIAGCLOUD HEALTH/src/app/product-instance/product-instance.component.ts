@@ -2,12 +2,11 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 
 @Component({
-  selector: 'app-vci',
-  templateUrl: './vci.component.html',
-  styleUrls: ['./vci.component.css']
+  selector: 'app-product-instance',
+  templateUrl: './product-instance.component.html',
+  styleUrls: ['./product-instance.component.css']
 })
-export class VciComponent implements OnInit {
-
+export class ProductInstanceComponent implements OnInit {
   constructor(private http: HttpClient) {}
   headerStyle = {};
   showNavBar = false;

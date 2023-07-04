@@ -81,27 +81,46 @@ groups:
 
   - name: High_CPU_Busy
     rules:
-      - alert: CPU_Usage_Application_Error
+      - alert: CPU_Used_Application_Error
         expr: absent(system_cpu_usage{instance="monitoring-app:8081", application="Monitoring-App"})
         for: 1s
         labels:
           severity: critical
         annotations:
-          summary: "CPU_Usage_Application_Error"
+          summary: "CPU_Used_Application_Error"
           description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} is not returning any CPU usage data"
       - alert: High_CPU_Busy
-        expr: (sum by(instance) (irate(node_cpu_seconds_total{mode!="idle"}[5m])) / on(instance) group_left sum by (instance)((irate(node_cpu_seconds_total[5m])))) * 100 ==100
+        expr: system_cpu_usage{exported_application="Monitoring-App"}* 100 ==100
         for: 1s
         labels:
           severity: critical
         annotations:
           summary: "CPU_Busy"
-          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} CPU is Busy"
+          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} CPU is High Busy"
       - alert: High_CPU_Busy
-        expr: (sum by(instance) (irate(node_cpu_seconds_total{mode!="idle"}[5m])) / on(instance) group_left sum by (instance)((irate(node_cpu_seconds_total[5m])))) * 100 > 85
+        expr: system_cpu_usage{exported_application="Monitoring-App"}* 100 > 85
         for: 1s
         labels:
           severity: warn
         annotations:
           summary: "High_CPU_Busy"
-          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} CPU is High_CPU_Busy"
+          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} CPU is Busy"
+
+  - name: High_RAM_Busy
+    rules:
+      - alert: RAM_Used_Application_Error
+        expr: 100 * (sum(jvm_memory_used_bytes{exported_application="Monitoring-App"})/sum(jvm_memory_max_bytes{exported_application="Monitoring-App"})) > 85
+        for: 1s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High_RAM_Busy"
+          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} RAM is Busy"
+      - alert: High_RAM_Busy
+        expr: 100 * (sum(jvm_memory_used_bytes{exported_application="Monitoring-App"})/sum(jvm_memory_max_bytes{exported_application="Monitoring-App"})) == 100
+        for: 1s
+        labels:
+          severity: critical
+        annotations:
+          summary: "High_RAM_Busy"
+          description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} RAM is High Busy"

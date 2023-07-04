@@ -2,11 +2,11 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 
 @Component({
-  selector: 'app-vci',
-  templateUrl: './vci.component.html',
-  styleUrls: ['./vci.component.css']
+  selector: 'app-support-session',
+  templateUrl: './support-session.component.html',
+  styleUrls: ['./support-session.component.css']
 })
-export class VciComponent implements OnInit {
+export class SupportSessionComponent implements OnInit {
 
   constructor(private http: HttpClient) {}
   headerStyle = {};

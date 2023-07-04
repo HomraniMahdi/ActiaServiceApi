@@ -9,6 +9,10 @@ import {SupportSessionComponent} from "./support-session/support-session.compone
 import {ProductInstanceComponent} from "./product-instance/product-instance.component";
 import {DepConfigComponent} from "./dep-config/dep-config.component";
 import {VciComponent} from "./vci/vci.component";
+import {DockerDashboardComponent} from "./docker-dashboard/docker-dashboard.component";
+import {ApplicationDashboardComponent} from "./application-dashboard/application-dashboard.component";
+import {HttpDashboardComponent} from "./http-dashboard/http-dashboard.component";
+import {KafkaDashboardComponent} from "./kafka-dashboard/kafka-dashboard.component";
 
 
 const routes: Routes = [
@@ -19,6 +23,10 @@ const routes: Routes = [
   { path: 'ProductInstance', component: ProductInstanceComponent,canActivate: [AuthGuard] },
   { path: 'DepConfig', component: DepConfigComponent,canActivate: [AuthGuard] },
   { path: 'Vci', component: VciComponent,canActivate: [AuthGuard] },
+  { path: 'DockerMetrics', component: DockerDashboardComponent,canActivate: [AuthGuard] },
+  { path: 'RequestMetrics', component: HttpDashboardComponent,canActivate: [AuthGuard] },
+  { path: 'ApplicationMetrics', component: ApplicationDashboardComponent,canActivate: [AuthGuard] },
+  { path: 'KafkaMetrics', component: KafkaDashboardComponent,canActivate: [AuthGuard] },
   { path: '', component: HomeComponent,canActivate: [AuthGuard]},
   { path: '**', redirectTo: '',canActivate: [AuthGuard] }
 ];

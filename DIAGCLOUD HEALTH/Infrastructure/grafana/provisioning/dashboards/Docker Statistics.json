@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 18,
+  "id": 3,
   "links": [],
   "panels": [
     {
@@ -274,6 +274,7 @@
           "exemplar": true,
           "expr": "time() - process_start_time_seconds{job=\"prometheus\"}",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -428,7 +429,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100)",
+          "expr": "sum(sum by (container_name)( rate(container_cpu_usage_seconds_total[1m] ) )) / count(node_cpu_seconds_total{mode=\"system\"}) * 100",
           "instant": true,
           "interval": "",
           "intervalFactor": 2,
@@ -510,10 +511,13 @@
       "pluginVersion": "8.0.6",
       "targets": [
         {
+          "exemplar": true,
           "expr": "(sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes +node_memory_Buffers_bytes + node_memory_Cached_bytes) ) / sum(node_memory_MemTotal_bytes) * 100",
           "format": "time_series",
+          "instant": true,
           "interval": "10s",
           "intervalFactor": 1,
+          "legendFormat": "",
           "refId": "A",
           "step": 10
         }
@@ -590,8 +594,10 @@
       "pluginVersion": "8.0.6",
       "targets": [
         {
+          "exemplar": true,
           "expr": "sum(sum by (container_name)( rate(container_cpu_usage_seconds_total[1m] ) )) / count(node_cpu_seconds_total{mode=\"system\"}) * 100",
           "format": "time_series",
+          "instant": true,
           "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -1447,6 +1453,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Docker Statistics",
-  "uid": "p3Yg7a9Vz",
-  "version": 6
+  "uid": "o_3oaar4z",
+  "version": 2
 }

@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -803,6 +803,7 @@
         {
           "exemplar": true,
           "expr": "system_cpu_usage{instance=\"monitoring-app:8081\", application=\"Monitoring-App\"}",
+          "instant": false,
           "interval": "",
           "legendFormat": "System Cpu Usage",
           "refId": "A"
@@ -811,6 +812,7 @@
           "exemplar": true,
           "expr": "process_cpu_usage{application=\"monitoring\", exported_application=\"Monitoring-App\", instance=\"monitoring-app:8081\", job=\"monitoring\"}",
           "hide": false,
+          "instant": false,
           "interval": "",
           "legendFormat": "Process Cpu Usage",
           "refId": "B"
@@ -1208,7 +1210,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"node-exporter:9100\", job=\"node\"} * 100) / node_memory_MemTotal_bytes{instance=\"node-exporter:9100\", job=\"node\"})",
+          "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"node-exporter:9100\", job=\"node-exporter\"} * 100) / node_memory_MemTotal_bytes{instance=\"node-exporter:9100\", job=\"node-exporter\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -2861,6 +2863,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Application_Statistics",
-  "uid": "MjrTp094z",
-  "version": 26
+  "uid": "S3Bh-a9Vz",
+  "version": 3
 }

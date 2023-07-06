@@ -52,3 +52,4 @@ spec:
           configMap:
             name: keycloak-config
       terminationGracePeriodSeconds: 10
+      restartPolicy: Always

@@ -18,7 +18,6 @@ import {KafkaDashboardComponent} from "./kafka-dashboard/kafka-dashboard.compone
 const routes: Routes = [
   { path: 'user', component: UsersComponent ,canActivate: [AuthGuard]},
   { path: 'swagger', component: SwaggerUiComponent,canActivate: [AuthGuard] },
-  { path: 'grafana', component: GrafanaComponent,canActivate: [AuthGuard] },
   { path: 'SupportSession', component: SupportSessionComponent,canActivate: [AuthGuard] },
   { path: 'ProductInstance', component: ProductInstanceComponent,canActivate: [AuthGuard] },
   { path: 'DepConfig', component: DepConfigComponent,canActivate: [AuthGuard] },

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jmx-exporter
+  namespace: monitoring
+  labels:
+    app: jmx-exporter
+spec:
+  selector:
+    app: jmx-exporter
+  ports:
+    - name: jmx-exporter
+      port: 5556
+      targetPort: 5556
+  type: ClusterIP

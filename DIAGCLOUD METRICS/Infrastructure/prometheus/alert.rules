@@ -63,7 +63,7 @@ groups:
   - name: http_errors
     rules:
       - alert: http_errors
-        expr: sum(http_server_requests_seconds_count{application="Monitoring-App",instance="monitoring-app:8081",status=~"4..|5..", outcome="CLIENT_ERROR"}) > 1
+        expr: sum(http_server_requests_seconds_count{application="Monitoring-App",instance="monitoring-app:8081",status=~"4..|5..", uri=~"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+"}) > 1
         for: 1s
         labels:
           severity: warning
@@ -71,7 +71,7 @@ groups:
           summary: "HTTP errors"
           description: "The Monitoring-App instance {{ $labels.instance }} has generated {{ $value }} HTTP errors in the last Second"
       - alert: http_errors
-        expr: sum(http_server_requests_seconds_count{application="Monitoring-App",instance="monitoring-app:8081",status=~"4..|5..", outcome="CLIENT_ERROR"}) > 10
+        expr: sum(http_server_requests_seconds_count{application="Monitoring-App",instance="monitoring-app:8081",status=~"4..|5..", uri=~"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+"}) > 10
         for: 1s
         labels:
           severity: critical

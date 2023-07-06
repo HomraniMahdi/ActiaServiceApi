@@ -35,3 +35,4 @@ spec:
         - name: postgres-config
           configMap:
             name: postgres-config
+      restartPolicy: Always

@@ -33,7 +33,7 @@ services:
     container_name: postgres-Monitoring
     hostname: postgres-Monitoring
     ports:
-      - 5432:5432
+      - 5433:5433
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -139,7 +139,7 @@ services:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
       SPRING_KAFKA_CONSUMER_GROUP_ID: group-Monitor
       SPRING_KAFKA_TEMPLATE_DEFAULT_TOPIC: "monitoring-topics"
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/keycloak
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/keycloak
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update

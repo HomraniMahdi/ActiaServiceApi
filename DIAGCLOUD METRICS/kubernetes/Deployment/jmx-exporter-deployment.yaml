@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-exporter
+  name: jmx-exporter
   namespace: monitoring
   labels:
-    app: node-exporter
+    app: jmx-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: node-exporter
+      app: jmx-exporter
   template:
     metadata:
       labels:
-        app: node-exporter
+        app: jmx-exporter
     spec:
       containers:
-        - name: node-exporter
-          image: prom/node-exporter
+        - name: jmx-exporter
+          image: sscaling/jmx-prometheus-exporter
           ports:
-            - containerPort: 9100
+            - containerPort: 5556
+          resources: {}
       restartPolicy: Always

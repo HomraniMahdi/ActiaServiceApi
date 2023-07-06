@@ -27,3 +27,4 @@ spec:
         - name: config-volume
           configMap:
             name: kafka-lag-exporter-config
+      restartPolicy: Always

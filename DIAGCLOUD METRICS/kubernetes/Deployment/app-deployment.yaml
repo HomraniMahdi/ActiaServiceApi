@@ -4,19 +4,20 @@ metadata:
   name: monitoring-app
   namespace: monitoring
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: monitoring-app
-  replicas: 3
   template:
     metadata:
       labels:
         app: monitoring-app
     spec:
       containers:
-        - name: monitoring-app
-          image: monitoring-app
-          imagePullPolicy: IfNotPresent
+        - name: app
+          image: homranimahdi/diagcloud-metriques:latest
+          ports:
+            - containerPort: 8081
           env:
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               value: kafka:9092
@@ -25,44 +26,21 @@ spec:
             - name: SPRING_KAFKA_CONSUMER_GROUP_ID
               value: group-Monitor
             - name: SPRING_KAFKA_TEMPLATE_DEFAULT_TOPIC
-              value: "monitoring-topics"
+              value: monitoring-topics
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/keycloak
+              value: jdbc:postgresql://postgres:5433/keycloak
             - name: SPRING_DATASOURCE_USERNAME
               value: postgres
             - name: SPRING_DATASOURCE_PASSWORD
               value: postgres
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: update
-          ports:
-            - containerPort: 8081
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8081
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8081
-            initialDelaySeconds: 60
-            periodSeconds: 30
+            - name: NODE_EXPORTER_PORT
+              value: "9100"
           volumeMounts:
-            - name: monitoring-app-storage
-              mountPath: /app/storage
+            - name: prometheus-volume
+              mountPath: /prometheus
       volumes:
-        - name: monitoring-app-storage
+        - name: prometheus-volume
           emptyDir: {}
-      imagePullSecrets:
-        - name: regcred
-      restartPolicy: 'Always'
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
-    type: RollingUpdate
+      restartPolicy: Always

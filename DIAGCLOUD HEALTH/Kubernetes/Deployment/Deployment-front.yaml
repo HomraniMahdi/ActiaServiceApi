@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: monitoring-dashboard
-          image: monitoring-dashboard
+          image: homranimahdi/diagcloud-health:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4201

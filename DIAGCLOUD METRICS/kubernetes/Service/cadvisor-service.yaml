@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: keycloak
+  name: cadvisor
   namespace: monitoring
 spec:
   selector:
-    app: keycloak
+    app: cadvisor-monitoring
   ports:
-    - name: http
+    - name: cadvisor
       port: 8080
       targetPort: 8080
   type: ClusterIP

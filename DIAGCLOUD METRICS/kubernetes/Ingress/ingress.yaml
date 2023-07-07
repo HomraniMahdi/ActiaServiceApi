@@ -3,38 +3,120 @@ kind: Ingress
 metadata:
   name: monitoring-ingress
   namespace: monitoring
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
   rules:
-    - host: monitoring.actia.com
+    - host: diagcloudhealth.com
       http:
         paths:
+          - path: /alert-manager
+            pathType: Prefix
+            backend:
+              service:
+                name: alert-manager
+                port:
+                  name: web
+          - path: /blackbox-exporter
+            pathType: Prefix
+            backend:
+              service:
+                name: blackbox-exporter
+                port:
+                  name: web
+          - path: /cadvisor-monitoring
+            pathType: Prefix
+            backend:
+              service:
+                name: cadvisor-monitoring
+                port:
+                  name: web
           - path: /grafana
             pathType: Prefix
             backend:
               service:
                 name: grafana
                 port:
-                  name: http
-          - path: /prometheus
+                  name: web
+          - path: /grafana-image-renderer
             pathType: Prefix
             backend:
               service:
-                name: prometheus
+                name: grafana-image-renderer-deployment
                 port:
-                  name: http
+                  name: web
+          - path: /jmx-exporter
+            pathType: Prefix
+            backend:
+              service:
+                name: jmx-exporter
+                port:
+                  name: web
+          - path: /kafka
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka
+                port:
+                  name: web
+          - path: /kafka-exporter
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-exporter
+                port:
+                  name: web
+          - path: /kafka-lag-exporter
+            pathType: Prefix
+            backend:
+              service:
+                name: kafka-lag-exporter
+                port:
+                  name: web
+          - path: /keycloak
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak
+                port:
+                  name: web
           - path: /monitoring-app
             pathType: Prefix
             backend:
               service:
                 name: monitoring-app
                 port:
-                  name: tcp
+                  name: web
           - path: /monitoring-dashboard
             pathType: Prefix
             backend:
               service:
                 name: monitoring-dashboard
                 port:
-                  name: tcp
+                  name: web
+          - path: /node-exporter
+            pathType: Prefix
+            backend:
+              service:
+                name: node-exporter
+                port:
+                  name: web
+          - path: /postgres
+            pathType: Prefix
+            backend:
+              service:
+                name: postgres
+                port:
+                  name: web
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  name: web
+          - path: /zookeeper
+            pathType: Prefix
+            backend:
+              service:
+                name: zookeeper
+                port:
+                  name: web

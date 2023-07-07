@@ -33,6 +33,10 @@ spec:
               value: keycloak
             - name: DB_PASSWORD
               value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: keycloak
+            - name: POSTGRES_PASSWORD
+              value: keycloak
             - name: KEYCLOAK_IMPORT
               value: keycloak-config
           volumeMounts:
@@ -51,5 +55,13 @@ spec:
         - name: keycloak-config
           configMap:
             name: keycloak-config
+
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
+
+
+  - name: keycloak-config
+    configMap:
+      name: postgres-config
+    subPath: realm-monitoring.json
+    mountPath: /tmp/keycloak-config.json

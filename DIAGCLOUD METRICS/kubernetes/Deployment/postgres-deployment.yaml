@@ -27,7 +27,7 @@ spec:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
             - name: postgres-config
-              mountPath: /tmp/realm-monitoring.json
+              mountPath: /docker-entrypoint-initdb.d
 
       volumes:
         - name: postgres-data

@@ -35,8 +35,6 @@ spec:
               value: keycloak
             - name: POSTGRES_PASSWORD
               value: keycloak
-            - name: POSTGRES_PASSWORD
-              value: keycloak
             - name: KEYCLOAK_IMPORT
               value: keycloak-config
           volumeMounts:
@@ -46,6 +44,7 @@ spec:
               mountPath: /docker-entrypoint-init.d
             - name: keycloak-config
               mountPath: /tmp/realm-monitoring.json
+              subPath: realm-monitoring.json
       volumes:
         - name: keycloak-data
           emptyDir: {}
@@ -54,14 +53,4 @@ spec:
             name: postgres-config
         - name: keycloak-config
           configMap:
-            name: keycloak-config
-
-      terminationGracePeriodSeconds: 10
-      restartPolicy: Always
-
-
-  - name: keycloak-config
-    configMap:
-      name: postgres-config
-    subPath: realm-monitoring.json
-    mountPath: /tmp/keycloak-config.json
+            name: postgres-config

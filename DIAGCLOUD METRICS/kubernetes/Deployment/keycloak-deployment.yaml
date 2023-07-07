@@ -37,6 +37,8 @@ spec:
               value: keycloak
             - name: KEYCLOAK_IMPORT
               value: /tmp/realm-monitoring.json
+            - name: JAVA_OPTS
+              value: "-Dkeycloak.profile.feature.upload_scripts=enabled"
           volumeMounts:
             - name: keycloak-data
               mountPath: /opt/jboss/keycloak/standalone/data

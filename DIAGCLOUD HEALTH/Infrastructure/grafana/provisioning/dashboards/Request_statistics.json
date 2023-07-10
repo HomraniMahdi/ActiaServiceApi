@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -956,7 +956,7 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 15,
         "x": 9,
         "y": 21
@@ -1007,109 +1007,6 @@
       "timeRegions": [],
       "timeShift": null,
       "title": "HTTP Requests Time",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "s",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "description": "Timer of servlet requests",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 15,
-        "x": 9,
-        "y": 27
-      },
-      "hiddenSeries": false,
-      "id": 10,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.0.6",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "http_server_requests_seconds_sum{application=\"Monitoring-App\", instance=\"monitoring-app:8081\",status=~\"2..\",uri=~\"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+\"}",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "{{method}} {{uri}} - {{status}}",
-          "refId": "A",
-          "step": 30
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "HTTP Requests Sucess Time",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1333,10 +1230,10 @@
         "h": 6,
         "w": 15,
         "x": 9,
-        "y": 33
+        "y": 28
       },
       "hiddenSeries": false,
-      "id": 12,
+      "id": 10,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -1366,7 +1263,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "http_server_requests_seconds_sum{application=\"Monitoring-App\", instance=\"monitoring-app:8081\",outcome=\"CLIENT_ERROR\"}",
+          "expr": "http_server_requests_seconds_sum{application=\"Monitoring-App\", instance=\"monitoring-app:8081\",status=~\"2..\",uri=~\"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1380,7 +1277,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "HTTP Requests Fail Time",
+      "title": "HTTP Requests Sucess Time",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1573,7 +1470,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(http_server_requests_seconds_count{application=\"Monitoring-App\",instance=\"monitoring-app:8081\",status=~\"4..|5..\", outcome=\"CLIENT_ERROR\"})",
+          "expr": "sum(http_server_requests_seconds_count{application=\"Monitoring-App\",instance=\"monitoring-app:8081\",status=~\"4..|5..\", uri=~\"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -1584,6 +1481,109 @@
       "timeShift": null,
       "title": "Monitoring Fail Request",
       "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "description": "Timer of servlet requests",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 15,
+        "x": 9,
+        "y": 34
+      },
+      "hiddenSeries": false,
+      "id": 12,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.0.6",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "http_server_requests_seconds_sum{application=\"Monitoring-App\", instance=\"monitoring-app:8081\",status=~\"4..|5..\", uri=~\"/vci/.+|/User/.+|/ProductsInstance/.+|/SupportSession/.+|/DepConfiguration/.+\"}",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "{{method}} {{uri}} - {{status}}",
+          "refId": "A",
+          "step": 30
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "HTTP Requests Fail Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "collapsed": false,
@@ -1654,7 +1654,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/vci/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/vci/.+\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1667,7 +1667,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/vci/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/vci/.+\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "ERROR",
@@ -1733,7 +1733,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/ProductsInstance/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/ProductsInstance/.+\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1746,7 +1746,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/ProductsInstance/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/ProductsInstance/.+\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "ERROR",
@@ -1812,7 +1812,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/SupportSession/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/SupportSession/.+\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1825,7 +1825,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/SupportSession/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/SupportSession/.+\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "ERROR",
@@ -1891,7 +1891,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/DepConfiguration/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"2.+\",uri=~\"/DepConfiguration/.+\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1904,7 +1904,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "exemplar": true,
-          "expr": "http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/DepConfiguration/.+\"}",
+          "expr": "sum(http_server_requests_seconds_count{job=\"monitoring\",method=~\".+\",status=~\"4..|5..\",uri=~\"/DepConfiguration/.+\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "ERROR",
@@ -2089,7 +2089,38 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ERROR"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SUCCESS"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 5,
@@ -3682,6 +3713,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Request_statistics",
-  "uid": "lKKN-Ir4zZ",
-  "version": 1
+  "uid": "88ioaa94k",
+  "version": 9
 }

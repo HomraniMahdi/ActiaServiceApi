@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 41,
+  "id": 4,
   "links": [],
   "panels": [
     {
@@ -274,6 +274,7 @@
           "exemplar": true,
           "expr": "time() - process_start_time_seconds{job=\"kafka\"}",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -529,6 +530,7 @@
           "exemplar": true,
           "expr": "sum(kafka_topic_partition_leader_is_preferred)",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
@@ -614,6 +616,7 @@
           "exemplar": true,
           "expr": "sum(kafka_topic_partition_under_replicated_partition)",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{pod}}",
@@ -806,6 +809,7 @@
           "exemplar": true,
           "expr": "sum(kafka_topic_partitions)",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Topic Partitions",
@@ -891,6 +895,7 @@
           "exemplar": true,
           "expr": "sum(kafka_topic_partition_in_sync_replica)",
           "format": "time_series",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -964,6 +969,7 @@
         {
           "exemplar": true,
           "expr": "rate(process_cpu_seconds_total{job=\"kafka\"}[1m])",
+          "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2416,6 +2422,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Kafka Statistics",
-  "uid": "y2nLK-r4z",
-  "version": 13
+  "uid": "SmSL--94z",
+  "version": 2
 }
